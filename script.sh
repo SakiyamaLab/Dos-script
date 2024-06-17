@@ -35,21 +35,46 @@ Dos ()
     ./dos.sh $start $end $dvice
 }
 
+select_device () {
+	device=$1
+	case $device in
+		*1*)
+			echo 1
+			;;
+		*2*)
+			echo 2
+			;;
+		*3*)
+			echo 3
+			;;
+		*4*)
+			echo 4
+			;;
+		*5*)
+			echo 5
+			;;
+		*)
+			echo 0
+			;;
+	esac
+}
+
 
 # 引数別の処理定義
 while getopts ":l:d:h" optKey; do
   case "$optKey" in
     l)
-      loop_time=$OPTARG
-      echo "loop time = ${loop_time}"
-      ;;
+      	loop_time=$OPTARG
+      	echo "loop time = ${loop_time}"
+      	;;
     d)
-      device=$OPTARG
-      echo "device = raspi${device}"
-      ;;
-    '-h'|'--help'|* )
-      usage
-      ;;
+	device=$(select_device $OPTARG)  # select_device の結果を数値で取得
+        if [ $device -eq 0 ]; then
+  		echo "Error: out of range of 1 to 5"
+                exit 1
+	fi
+        echo "device = raspi${device}"
+        ;; 
   esac
 done
 
