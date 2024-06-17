@@ -29,7 +29,7 @@ EOM
 
 Dos ()
 {
-    ip="localhost"
+    ip="192.168.20.26"
     port="12345"
     start=$(( $1 * ($2 - 1) + 1 ))  # startを計算する式
     end=$(( $1 * $2 ))          # endを計算する式
