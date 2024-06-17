@@ -31,20 +31,16 @@ Dos ()
 {
     ip="localhost"
     port="12345"
-    start=$1
-    end=$2
-    device=$3
+    start=$(( $1 * ($2 - 1) + 1 ))  # startを計算する式
+    end=$(( $1 * $2 ))          # endを計算する式
+    device=$2
     ./dos.sh $start $end $dvice
 }
 
 
 # 引数別の処理定義
-while getopts ":f:l:d:h" optKey; do
+while getopts ":l:d:h" optKey; do
   case "$optKey" in
-    f)
-      file_path=$(realpath ${OPTARG})
-      echo "file = ${file_path}"
-      ;;
     l)
       loop_time=$OPTARG
       echo "loop time = ${loop_time}"
@@ -60,4 +56,4 @@ while getopts ":f:l:d:h" optKey; do
 done
 
 
-Dos 
+Dos $loop_time $device
