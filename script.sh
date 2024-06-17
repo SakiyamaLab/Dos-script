@@ -32,7 +32,7 @@ Dos ()
     start=$(( $1 * ($2 - 1) + 1 ))  # startを計算する式
     end=$(( $1 * $2 ))          # endを計算する式
     device=$2
-    ./dos.sh $start $end $dvice
+    ./dos.sh $start $end $device
 }
 
 select_device () {
