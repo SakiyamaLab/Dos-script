@@ -1,4 +1,4 @@
-ip="localhost"
+ip="192.168.20.226"
 port="12345"
 device=$3
 arg1=$1
