@@ -9,6 +9,6 @@ for i in $(seq ${arg1} ${arg2}); do
 done
 
 "/home/raspberrypi${device}/Develop/lab/db/tsurugi-sql/tgsql-1.3.0/bin/tgsql" -c "tcp://${ip}:${port}" --exec "select * from test"
-"/home/raspberrypi${device}/Develop/lab/db/tsurugi-sql/tgsql-1.3.0/bin/tgsql" -c "tcp://${ip}:${port}" --exec "delete from test"
+# "/home/raspberrypi${device}/Develop/lab/db/tsurugi-sql/tgsql-1.3.0/bin/tgsql" -c "tcp://${ip}:${port}" --exec "delete from test"
 
 exit 0
