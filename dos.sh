@@ -2,7 +2,7 @@ server_ip="192.168.20.226"
 port="12345"
 arg1=$1
 arg2=$2
-date=$3
+file=$3
 client_ip=$(./get_ip.sh)
 client_serial=$(./serial.sh)
 echo "serial = $client_serial"
@@ -12,7 +12,7 @@ for i in $(seq ${arg1} ${arg2}); do
 	"/home/$(whoami)/Develop/lab/db/tsurugi-sql/tgsql-1.3.0/bin/tgsql" -c "tcp://$server_ip:$port" --exec "update sensorNormal set stime='$(./timestamp.sh)' where id=$i"
 	ended_at=$(date +'%s.%3N')
 	elapsed=$(echo "scale=3; $ended_at - $started_at" | bc)
-	echo "$(date +'%Y-%m-%d %H:%M:%S'),$elapsed" >> "${date}.csv"
+	echo "$(date +'%Y-%m-%d %H:%M:%S'),$elapsed" >> $file
 done
 
 # "/home/$(whoami)/Develop/lab/db/tsurugi-sql/tgsql-1.3.0/bin/tgsql" -c "tcp://${server_ip}:${port}" --exec "select * from sensorNormal"
