@@ -4,8 +4,8 @@
 date=$(date +'%Y-%m-%d_%H:%M:%S')
 
 select_device () {
-    device=$1
-    case $device in
+    local host=$1
+    case $host in
         *1*)
             echo 1
             ;;
@@ -28,8 +28,8 @@ select_device () {
 }
 
 hostname=$(hostname)
-device=$(select_device $hostname)
-echo "device = $device"
+device_num=$(select_device "$hostname")
+echo "device = $device_num"
 
 # 計算式を関数化する
 calculate_start_end () {
@@ -50,7 +50,7 @@ for (( i=1; i<=$num_processes; i++ )); do
     read start end <<< $(calculate_start_end $1 $num_processes $i)
 
     echo "start = $start end = $end"
-    ./dos.sh $start $end "$date" &
+    ./dos.sh $start $end "$date" $device_num &
 done
 
 # 全てのバックグラウンドジョブが完了するまで待機
