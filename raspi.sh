@@ -43,7 +43,8 @@ num_processes=$2
 echo "processes = $num_processes"
 
 # CSVファイルのヘッダを追加
-echo "timestamp,elapsed_time" > "${date}.csv"
+file="${date}_loop${1}_processes${2}.csv"
+echo "timestamp,elapsed_time" > $file
 
 for (( i=1; i<=$num_processes; i++ )); do
     # 計算式を呼び出してstartとendを取得
