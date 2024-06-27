@@ -1,51 +1,59 @@
 #!/bin/bash
 
+# started timestamp
+date=$(date +'%Y-%m-%d_%H:%M:%S')
+
 select_device () {
-	device=$1
-	case $device in
-		*1*)
-			echo 1
-			;;
-		*2*)
-			echo 2
-			;;
-		*3*)
-			echo 3
-			;;
-		*4*)
-			echo 4
-			;;
-		*5*)
-			echo 5
-			;;
-		*)
-			echo 0
-			;;
-	esac
+    device=$1
+    case $device in
+        *1*)
+            echo 1
+            ;;
+        *2*)
+            echo 2
+            ;;
+        *3*)
+            echo 3
+            ;;
+        *4*)
+            echo 4
+            ;;
+        *5*)
+            echo 5
+            ;;
+        *)
+            echo 0
+            ;;
+    esac
 }
 
 hostname=$(hostname)
 device=$(select_device $hostname)
 echo "device = $device"
 
-start1=$(( $1 * ($device - 1) + 1 ))  		# startを計算する式
-end1=$(( $1 * $device / 5 * 1 ))          	# endを計算する式
-start2=$(( $1 * ($device - 1) + 1 + $end1 )) 	# startを計算する式
-end2=$(( $1 * $device / 5 * 2 ))        	# endを計算する式
-start3=$(( $1 * ($device - 1) + 1 + $end2 ))  	# startを計算する式
-end3=$(( $1 * $device / 5 * 3 ))          	# endを計算する式
-start4=$(( $1 * ($device - 1) + 1 + $end3 ))  	# startを計算する式
-end4=$(( $1 * $device / 5 * 4 ))          	# endを計算する式
-start5=$(( $1 * ($device - 1) + 1 + $end4 ))  	# startを計算する式
-end5=$(( $1 * $device ))          		# endを計算する式
+# 計算式を関数化する
+calculate_start_end () {
+    local start=$(( $1 / $2 * ($3 - 1) + 1 ))
+    local end=$(( $1 / $2 * $3 ))
+    echo "$start $end"
+}
 
-echo "start = $start1 end = $end1"
-./dos.sh $start1 $end1 $device &
-echo "start = $start2 end = $end2"
-./dos.sh $start2 $end2 $device &
-echo "start = $start3 end = $end3"
-./dos.sh $start3 $end3 $device &
-echo "start = $start4 end = $end4"
-./dos.sh $start4 $end4 $device &
-echo "start = $start5 end = $end5"
-./dos.sh $start5 $end5 $device &
+# 任意の数の並列処理を実行する
+num_processes=$2
+echo "processes = $num_processes"
+
+# CSVファイルのヘッダを追加
+echo "timestamp,elapsed_time" > "${date}.csv"
+
+for (( i=1; i<=$num_processes; i++ )); do
+    # 計算式を呼び出してstartとendを取得
+    read start end <<< $(calculate_start_end $1 $num_processes $i)
+
+    echo "start = $start end = $end"
+    ./dos.sh $start $end "$date" &
+done
+
+# 全てのバックグラウンドジョブが完了するまで待機
+wait
+
+echo "All processes completed."
