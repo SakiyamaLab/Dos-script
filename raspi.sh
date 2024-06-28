@@ -51,7 +51,7 @@ for (( i=1; i<=$num_processes; i++ )); do
     read start end <<< $(calculate_start_end $1 $num_processes $i)
 
     echo "start = $start end = $end"
-    ./dos.sh $start $end "$date" $device_num &
+    ./dos.sh $start $end $file $device_num &
 done
 
 # 全てのバックグラウンドジョブが完了するまで待機
