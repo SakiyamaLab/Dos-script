@@ -13,7 +13,7 @@ for (( i=$arg1+$device_num - 1; i<=$arg2; i+=5 )); do
 	"/home/$(whoami)/Develop/lab/db/tsurugi-sql/tgsql-1.3.0/bin/tgsql" -c "tcp://$server_ip:$port" --exec "update sensorNormal set stime='$(./timestamp.sh)' where id=$i"
 	ended_at=$(date +'%s.%3N')
 	elapsed=$(echo "scale=3; $ended_at - $started_at" | bc)
-	echo "$(date +'%H:%M:%S'),$elapsed" >> $file
+	echo "$(date +'%H:%M:%S.%3N'),$elapsed" >> $file
 done
 
 # "/home/$(whoami)/Develop/lab/db/tsurugi-sql/tgsql-1.3.0/bin/tgsql" -c "tcp://${server_ip}:${port}" --exec "select * from sensorNormal"
