@@ -46,12 +46,14 @@ echo "processes = $num_processes"
 file="${date}_loop${1}_processes${2}_$(whoami).csv"
 echo "timestamp,elapsed_time" > $file
 
+sleep_time=$4
+
 for (( i=1; i<=$num_processes; i++ )); do
     # 計算式を呼び出してstartとendを取得
     read start end <<< $(calculate_start_end $1 $num_processes $i)
 
     echo "start = $start end = $end"
-    ./dos.sh $start $end $file $device_num &
+    ./dos.sh $start $end $file $device_num $sleep_time&
 done
 
 # 全てのバックグラウンドジョブが完了するまで待機

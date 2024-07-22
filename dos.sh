@@ -7,13 +7,24 @@ device_num=$4
 client_ip=$(./get_ip.sh)
 client_serial=$(./serial.sh)
 echo "serial = $client_serial"
-for (( i=$arg1+$device_num - 1; i<=$arg2; i+=5 )); do
+
+total_seconds=300
+interval=$5
+seconds_passed=0
+while true; do
+	if [ $seconds_passed -ge $total_seconds ]; then
+		break
+	fi
 	started_at=$(date +'%s.%3N')
 	"/home/$(whoami)/Develop/lab/db/tsurugi-sql/tgsql-1.3.0/bin/tgsql" -c "tcp://$server_ip:$port" --exec "insert into sensorNormal(id, hostname, fixedid, payload, ctime) values($i, '$client_ip', '$client_serial', '$(./random.sh)', '$(./timestamp.sh)')"
 	"/home/$(whoami)/Develop/lab/db/tsurugi-sql/tgsql-1.3.0/bin/tgsql" -c "tcp://$server_ip:$port" --exec "update sensorNormal set stime='$(./timestamp.sh)' where id=$i"
 	ended_at=$(date +'%s.%3N')
 	elapsed=$(echo "scale=3; $ended_at - $started_at" | bc)
 	echo "$(date +'%H:%M:%S.%3N'),$elapsed" >> $file
+
+	# 経過時間を更新
+    	seconds_passed=$((seconds_passed + interval))
+	sleep $interval
 done
 
 # "/home/$(whoami)/Develop/lab/db/tsurugi-sql/tgsql-1.3.0/bin/tgsql" -c "tcp://${server_ip}:${port}" --exec "select * from sensorNormal"
