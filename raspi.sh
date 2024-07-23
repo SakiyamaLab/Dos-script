@@ -43,7 +43,7 @@ num_processes=$1
 echo "processes = $num_processes"
 
 # CSVファイルのヘッダを追加
-file="${date}_loop${1}_processes${2}_$(whoami).csv"
+file="${date}_interval${2}s_processes${1}_$(whoami).csv"
 echo "timestamp,elapsed_time" > $file
 
 # interval time
