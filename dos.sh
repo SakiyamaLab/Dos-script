@@ -1,15 +1,13 @@
 server_ip="192.168.20.226"
 port="12345"
-arg1=$1
-arg2=$2
-file=$3
-device_num=$4
+file=$1
+device_num=$2
 client_ip=$(./get_ip.sh)
 client_serial=$(./serial.sh)
 echo "serial = $client_serial"
 
 total_seconds=300
-interval=$5
+interval=$3
 seconds_passed=0
 while true; do
 	if [ $seconds_passed -ge $total_seconds ]; then

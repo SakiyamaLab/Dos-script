@@ -3,6 +3,12 @@
 # started timestamp
 date=$(date +'%Y-%m-%d_%H:%M:%S')
 
+# 引数が渡されていない場合のエラーメッセージ
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <processes> <interval time>"
+    exit 1
+fi
+
 select_device () {
     local host=$1
     case $host in
@@ -31,29 +37,20 @@ hostname=$(hostname)
 device_num=$(select_device "$hostname")
 echo "device = $device_num"
 
-# 計算式を関数化する
-calculate_start_end () {
-    local start=$(( $1 / $2 * ($3 - 1) + 1 ))
-    local end=$(( $1 / $2 * $3 ))
-    echo "$start $end"
-}
 
 # 任意の数の並列処理を実行する
-num_processes=$2
+num_processes=$1
 echo "processes = $num_processes"
 
 # CSVファイルのヘッダを追加
 file="${date}_loop${1}_processes${2}_$(whoami).csv"
 echo "timestamp,elapsed_time" > $file
 
-sleep_time=$4
+# interval time
+sleep_time=$2
 
 for (( i=1; i<=$num_processes; i++ )); do
-    # 計算式を呼び出してstartとendを取得
-    read start end <<< $(calculate_start_end $1 $num_processes $i)
-
-    echo "start = $start end = $end"
-    ./dos.sh $start $end $file $device_num $sleep_time&
+    ./dos.sh $file $device_num $sleep_time&
 done
 
 # 全てのバックグラウンドジョブが完了するまで待機
