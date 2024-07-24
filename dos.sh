@@ -7,7 +7,7 @@ client_serial=$(./serial.sh)
 id=$$
 echo "serial = $client_serial"
 
-total_seconds=60
+total_seconds=300
 interval=$3
 seconds_passed=0
 while true; do
