@@ -16,8 +16,8 @@ while true; do
 	fi
 	started_at=$(date +'%s.%3N')
 	"/home/$(whoami)/Develop/lab/db/tsurugi-sql/tgsql-1.3.0/bin/tgsql" -c "tcp://$server_ip:$port" --exec "insert into sensorNormal(id, hostname, fixedid, payload, ctime) values($id, '$client_ip', '$client_serial', '$(./random.sh)', '$(./timestamp.sh)')" &
-	"/home/$(whoami)/Develop/lab/db/tsurugi-sql/tgsql-1.3.0/bin/tgsql" -c "tcp://$server_ip:$port" --exec "update sensorNormal set stime='$(./timestamp.sh)' where id=$id"
-	ended_at=$(date +'%s.%3N') &
+	"/home/$(whoami)/Develop/lab/db/tsurugi-sql/tgsql-1.3.0/bin/tgsql" -c "tcp://$server_ip:$port" --exec "update sensorNormal set stime='$(./timestamp.sh)' where id=$id" &
+	ended_at=$(date +'%s.%3N')
 	elapsed=$(echo "scale=3; $ended_at - $started_at" | bc)
 	echo "$(date +'%H:%M:%S.%3N'),$elapsed" >> $file
 

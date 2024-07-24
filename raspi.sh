@@ -50,7 +50,7 @@ echo "timestamp,elapsed_time" > $file
 sleep_time=$2
 
 for (( i=1; i<=$num_processes; i++ )); do
-    ./dos.sh $file $device_num $sleep_time&
+    ./dos.sh $file $device_num $sleep_time &
 done
 
 # 全てのバックグラウンドジョブが完了するまで待機
